@@ -14,7 +14,7 @@ import WorkSliderButtons from '@/components/WorkSliderButtons'
 const projects = [
   {
     num: "01",
-    category: "Full-Stack Application",
+    category: "Full-Stack Event System",
     title: "Bangaldesh ICT & Inoovation Awards",
     description:
       "Developed a comprehensive event platform (awards.biin.org.bd) with participant registration and secure judging system. Built with React.js, Node.js, and MongoDB, it features automated scoring, category-based results calculation, and Google Sheets integration for streamlined event management from registration to winner declaration.",
@@ -30,7 +30,7 @@ const projects = [
   },
   {
     num: "02",
-    category: "Full-Stack Application",
+    category: "Real-Time Chat Application",
     title: "Chatify - Real-Time Chat Application",
     description:
       "Developed a real-time messaging platform supporting one-to-one and group chats with typing indicators, read receipts, and online/offline status via WebSocket. Includes a notification system, responsive design, and user customization features like profile management, theme selection, and chat color personalization for an enhanced experience.",
@@ -46,7 +46,7 @@ const projects = [
   },
   {
     num: "03",
-    category: "Full-Stack E-Commerce",
+    category: "Full-Stack Tech E-Commerce",
     title: "TechTon - Tech E-Commerce Platform",
     description:
       "Developed a tech-focused e-commerce platform with voice-powered search and an AI chatbot for customer support. Implemented a vendor-aggregator system for multi-vendor sales, a real-time admin dashboard for inventory and orders, and integrated secure payments with robust authentication—all within a fully responsive design.",
@@ -84,7 +84,7 @@ const Work = () => {
               </div>
               {/* project category */}
               <h2 className="text-[42px] font-bold leading-none text-white group-hover:text-accent transition-all duration-500 capitalize">
-                {project.category} project
+                {project.category} 
               </h2>
               {/* project description */}
               <p className="text-white/60">{project.description}</p>
