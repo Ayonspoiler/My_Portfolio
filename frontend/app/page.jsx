@@ -17,11 +17,10 @@ const Home = () => {
               <span className="text-accent">Syed Md Shadman Alam</span>
             </h1>
             <p className="max-w-[500px] mb-9 text-white/80">
-              Aspiring Software Engineer specializing in full-stack development
-              with React, Spring Boot, and microservices. Skilled in building
-              scalable applications, real-time systems, and machine learning
-              solutions. Passionate problem-solver dedicated to creating
-              efficient software.
+              An aspiring software engineer with a passion for turning ideas
+              into functional, real-world applications. I enjoy the entire
+              process, from solving complex problems to building seamless
+              digital experiences that make a difference.
             </p>
             {/* button and socials */}
             <div className="flex flex-col xl:flex-row items-center gap-8">
