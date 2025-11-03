@@ -22,14 +22,15 @@ const Home = () => {
             </p>
             {/* button and socials */}
             <div className="flex flex-col xl:flex-row items-center gap-8">
-              <Button
-                variant="outline"
-                size="lg"
-                className="uppercase flex items-center gap-2"
+              <a
+                href="/assets/MY_CV.pdf"
+                download="Syed_Md_Shadman_Alam_CV.pdf"
+                className="uppercase flex items-center gap-2 border border-accent text-accent hover:bg-accent hover:text-primary rounded-full px-6 py-3 transition-all duration-300"
               >
                 <span>Download CV</span>
                 <FiDownload className="text-xl" />
-              </Button>
+              </a>
+
               <div className="mb-8 xl:mb-0">
                 <Socials
                   containerStyles="flex gap-6"
@@ -39,10 +40,12 @@ const Home = () => {
             </div>
           </div>
           {/* photo */}
-          <div className="order-1 xl:order-none mb-8 xl:mb-0"><Photo/></div>
+          <div className="order-1 xl:order-none mb-8 xl:mb-0">
+            <Photo />
+          </div>
         </div>
       </div>
-      <Stats/>
+      <Stats />
     </section>
   );
 };

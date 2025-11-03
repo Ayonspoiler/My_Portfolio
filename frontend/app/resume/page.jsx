@@ -50,7 +50,7 @@ const experience = {
 
     items:[
       {
-        company: "Bangladesh ICT and Innovation Network",
+        company: "Bangladesh ICT & Innovation Network",
         position: "Software Developer Intern",
         duration: "Sept 2025 - Jan 2026",
  }
