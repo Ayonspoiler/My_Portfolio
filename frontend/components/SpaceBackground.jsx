@@ -9,48 +9,73 @@ const SpaceBackground = () => {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    const ctx = canvas.getContext("2d");
+    const ctx = canvas.getContext("2d", { alpha: false });
     let animationFrameId;
     let stars = [];
     let lastTime = 0;
-    const fps = 30; // Limit FPS for better mobile performance
+    const fps = 30;
     const fpsInterval = 1000 / fps;
 
-    // Detect if mobile device
+    // Detect mobile
     const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+    const isLowEnd = isMobile && window.devicePixelRatio <= 2;
 
-    // Set canvas size
+    // Set canvas size with pixel ratio consideration
     const resizeCanvas = () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
+      const dpr = isLowEnd ? 1 : Math.min(window.devicePixelRatio, 2);
+      const rect = canvas.getBoundingClientRect();
+
+      canvas.width = rect.width * dpr;
+      canvas.height = rect.height * dpr;
+      canvas.style.width = rect.width + "px";
+      canvas.style.height = rect.height + "px";
+
+      ctx.scale(dpr, dpr);
       initStars();
     };
 
-    // Initialize stars
-   const initStars = () => {
-     stars = [];
-     // Reduce stars on mobile for performance
-     const starDensity = isMobile ? 5000 : 3000;
-     const numStars = Math.floor((canvas.width * canvas.height) / starDensity);
-     for (let i = 0; i < numStars; i++) {
-       stars.push({
-         x: Math.random() * canvas.width,
-         y: Math.random() * canvas.height,
-         radius: Math.random() * 1.5,
-         vx: (Math.random() - 0.5) * 0.3, // Slower movement
-         vy: (Math.random() - 0.5) * 0.3,
-         opacity: Math.random(),
-         fadeSpeed: Math.random() * 0.015 + 0.003, // Slower fade
-         fadeDirection: Math.random() > 0.5 ? 1 : -1,
-       });
-     }
-   };
+    // Initialize stars with better mobile optimization
+    const initStars = () => {
+      stars = [];
+      const area = canvas.width * canvas.height;
+      const starDensity = isMobile ? 15000 : 5000;
+      const numStars = Math.min(
+        Math.floor(area / starDensity),
+        isMobile ? 150 : 300
+      );
 
-    // Animate stars
-    const animate = () => {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      for (let i = 0; i < numStars; i++) {
+        const radius = Math.random() * (isMobile ? 1.2 : 1.5);
+        stars.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height,
+          radius,
+          vx: (Math.random() - 0.5) * 0.15,
+          vy: (Math.random() - 0.5) * 0.15,
+          opacity: Math.random() * 0.8 + 0.2,
+          fadeSpeed: Math.random() * 0.01 + 0.002,
+          fadeDirection: Math.random() > 0.5 ? 1 : -1,
+          hasGlow: !isMobile && radius > 1.2 && Math.random() > 0.7,
+        });
+      }
+    };
 
-      // Draw stars
+    // Optimized animation with FPS limiting
+    const animate = (currentTime) => {
+      animationFrameId = requestAnimationFrame(animate);
+
+      const elapsed = currentTime - lastTime;
+      if (elapsed < fpsInterval) return;
+
+      lastTime = currentTime - (elapsed % fpsInterval);
+
+      // Clear with background color instead of clearRect
+      ctx.fillStyle = "#1c1c22";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      // Batch rendering
+      ctx.save();
+
       stars.forEach((star) => {
         // Update position
         star.x += star.vx;
@@ -74,28 +99,49 @@ const SpaceBackground = () => {
         ctx.fillStyle = `rgba(255, 255, 255, ${star.opacity})`;
         ctx.fill();
 
-        // Add glow for larger stars
-        if (star.radius > 1) {
+        // Add glow only for special stars on desktop
+        if (star.hasGlow) {
           ctx.beginPath();
           ctx.arc(star.x, star.y, star.radius * 2, 0, Math.PI * 2);
-          ctx.fillStyle = `rgba(8, 255, 153, ${star.opacity * 0.3})`;
+          ctx.fillStyle = `rgba(8, 255, 153, ${star.opacity * 0.2})`;
           ctx.fill();
         }
       });
 
-      animationFrameId = requestAnimationFrame(animate);
+      ctx.restore();
     };
 
     resizeCanvas();
-    animate();
 
-    window.addEventListener("resize", resizeCanvas);
+    // Delay start for mobile to let page settle
+    const startDelay = isMobile ? 100 : 0;
+    const timeoutId = setTimeout(() => {
+      animationFrameId = requestAnimationFrame(animate);
+    }, startDelay);
+
+    // Debounce resize
+    let resizeTimeout;
+    const handleResize = () => {
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(resizeCanvas, 150);
+    };
+
+    window.addEventListener("resize", handleResize);
 
     return () => {
-      window.removeEventListener("resize", resizeCanvas);
+      clearTimeout(timeoutId);
+      clearTimeout(resizeTimeout);
+      window.removeEventListener("resize", handleResize);
       cancelAnimationFrame(animationFrameId);
     };
   }, []);
+
+  // Reduce motion for mobile
+  const isMobileDevice =
+    typeof window !== "undefined" &&
+    /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+
+  const orbDuration = isMobileDevice ? 12 : 8;
 
   return (
     <>
@@ -106,7 +152,7 @@ const SpaceBackground = () => {
         style={{ background: "linear-gradient(to bottom, #1c1c22, #16161d)" }}
       />
 
-      {/* Animated gradient orbs */}
+      {/* Simplified animated gradient orbs for mobile */}
       <motion.div
         className="fixed top-1/4 left-1/4 w-96 h-96 rounded-full blur-3xl opacity-20 pointer-events-none -z-40"
         style={{
@@ -118,45 +164,51 @@ const SpaceBackground = () => {
           y: [0, 30, 0],
         }}
         transition={{
-          duration: 8,
+          duration: orbDuration,
           repeat: Infinity,
           ease: "easeInOut",
         }}
       />
 
-      <motion.div
-        className="fixed bottom-1/4 right-1/4 w-80 h-80 rounded-full blur-3xl opacity-15 pointer-events-none -z-40"
-        style={{
-          background: "radial-gradient(circle, #08ff99 0%, transparent 70%)",
-        }}
-        animate={{
-          scale: [1, 1.3, 1],
-          x: [0, -40, 0],
-          y: [0, -50, 0],
-        }}
-        transition={{
-          duration: 10,
-          repeat: Infinity,
-          ease: "easeInOut",
-        }}
-      />
+      {!isMobileDevice && (
+        <>
+          <motion.div
+            className="fixed bottom-1/4 right-1/4 w-80 h-80 rounded-full blur-3xl opacity-15 pointer-events-none -z-40"
+            style={{
+              background:
+                "radial-gradient(circle, #08ff99 0%, transparent 70%)",
+            }}
+            animate={{
+              scale: [1, 1.3, 1],
+              x: [0, -40, 0],
+              y: [0, -50, 0],
+            }}
+            transition={{
+              duration: orbDuration + 2,
+              repeat: Infinity,
+              ease: "easeInOut",
+            }}
+          />
 
-      <motion.div
-        className="fixed top-1/2 right-1/3 w-64 h-64 rounded-full blur-3xl opacity-10 pointer-events-none -z-40"
-        style={{
-          background: "radial-gradient(circle, #08ff99 0%, transparent 70%)",
-        }}
-        animate={{
-          scale: [1, 1.4, 1],
-          x: [0, 60, 0],
-          y: [0, -40, 0],
-        }}
-        transition={{
-          duration: 12,
-          repeat: Infinity,
-          ease: "easeInOut",
-        }}
-      />
+          <motion.div
+            className="fixed top-1/2 right-1/3 w-64 h-64 rounded-full blur-3xl opacity-10 pointer-events-none -z-40"
+            style={{
+              background:
+                "radial-gradient(circle, #08ff99 0%, transparent 70%)",
+            }}
+            animate={{
+              scale: [1, 1.4, 1],
+              x: [0, 60, 0],
+              y: [0, -40, 0],
+            }}
+            transition={{
+              duration: orbDuration + 4,
+              repeat: Infinity,
+              ease: "easeInOut",
+            }}
+          />
+        </>
+      )}
     </>
   );
 };
