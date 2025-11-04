@@ -19,8 +19,8 @@ const projects = [
     description:
       "Developed a comprehensive event platform (awards.biin.org.bd) with participant registration and secure judging system. Built with React.js, Node.js, and MongoDB, it features automated scoring, category-based results calculation, and Google Sheets integration for streamlined event management from registration to winner declaration.",
     stack: [
-      { name: "React" },
-      { name: "Node.js/Express.js" },
+      { name: "React.js" },
+      { name: "Express.js" },
       { name: "Google Sheets API" },
       { name: "MongoDB" },
     ],
