@@ -10,9 +10,9 @@
   --font-mono: var(--font-jetbrainsMono), monospace;
 
   /* Add your custom colors here */
-    --color-primary: #1c1c22;
-    --color-accent: #08ff99;
-    --color-accent-hover: #08e187;
+  --color-primary: #1c1c22;
+  --color-accent: #08ff99;
+  --color-accent-hover: #08e187;
 
 
   --color-sidebar-ring: var(--sidebar-ring);
@@ -49,12 +49,12 @@
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
 
-    /* Add screen breakpoints */
-      --breakpoint-sm: 640px;
-      --breakpoint-md: 768px;
-      --breakpoint-lg: 1024px;
-      --breakpoint-xl: 1280px;
-      --breakpoint-2xl: 1536px;
+  /* Add screen breakpoints */
+  --breakpoint-sm: 640px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 1024px;
+  --breakpoint-xl: 1280px;
+  --breakpoint-2xl: 1536px;
 }
 
 :root {
@@ -130,31 +130,34 @@
   * {
     @apply border-border outline-ring/50;
   }
-  body {
-    @apply bg-primary text-white leading-loose ;
-    font-family: var(--font-jetbrainsMono), monospace;
-      background: transparent !important;
 
+  body {
+    @apply bg-primary text-white leading-loose;
+    font-family: var(--font-jetbrainsMono), monospace;
+    background: transparent !important;
   }
-  .h1{
+
+  .h1 {
     @apply text-[48px] xl:text-[80px] leading-[1.1] font-semibold;
   }
-  .h2{
+
+  .h2 {
     @apply text-[36px] xl:text-[48px] leading-[1.1] font-semibold;
   }
-  .h3{
+
+  .h3 {
     @apply text-[20px] xl:text-[24px] leading-[1.1] font-semibold;
   }
- 
 }
- .text-outline {
-   -webkit-text-stroke: 1px #ffffff;
 
- }
+.text-outline {
+  -webkit-text-stroke: 1px #ffffff;
+}
 
 .group:hover .text-outline-hover {
-   -webkit-text-stroke: 1px #00ff99;
- }
+  -webkit-text-stroke: 1px #00ff99;
+}
+
 /* Optional: Add custom utilities for accent hover states */
 @layer utilities {
   .accent-hover:hover {
@@ -162,17 +165,26 @@
   }
 }
 
+/* Performance optimizations for mobile */
+@media (max-width: 768px) {
+
+  /* Reduce blur radius on mobile for better performance */
+  .blur-3xl {
+    --tw-blur: blur(40px);
+  }
+
+  /* Optimize animations */
+  * {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* Smooth scrolling */
+  html {
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
 /* Hide next.js dev indicator */
 nextjs-portal {
   display: none !important;
-}
-
-@media (max-width: 768px) {
-  * {
-    -webkit-transform: translateZ(0);
-    -moz-transform: translateZ(0);
-    -ms-transform: translateZ(0);
-    -o-transform: translateZ(0);
-    transform: translateZ(0);
-  }
 }
