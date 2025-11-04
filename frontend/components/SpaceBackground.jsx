@@ -12,6 +12,12 @@ const SpaceBackground = () => {
     const ctx = canvas.getContext("2d");
     let animationFrameId;
     let stars = [];
+    let lastTime = 0;
+    const fps = 30; // Limit FPS for better mobile performance
+    const fpsInterval = 1000 / fps;
+
+    // Detect if mobile device
+    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
     // Set canvas size
     const resizeCanvas = () => {
@@ -21,22 +27,24 @@ const SpaceBackground = () => {
     };
 
     // Initialize stars
-    const initStars = () => {
-      stars = [];
-      const numStars = Math.floor((canvas.width * canvas.height) / 3000);
-      for (let i = 0; i < numStars; i++) {
-        stars.push({
-          x: Math.random() * canvas.width,
-          y: Math.random() * canvas.height,
-          radius: Math.random() * 1.5,
-          vx: (Math.random() - 0.5) * 0.5,
-          vy: (Math.random() - 0.5) * 0.5,
-          opacity: Math.random(),
-          fadeSpeed: Math.random() * 0.02 + 0.005,
-          fadeDirection: Math.random() > 0.5 ? 1 : -1,
-        });
-      }
-    };
+   const initStars = () => {
+     stars = [];
+     // Reduce stars on mobile for performance
+     const starDensity = isMobile ? 5000 : 3000;
+     const numStars = Math.floor((canvas.width * canvas.height) / starDensity);
+     for (let i = 0; i < numStars; i++) {
+       stars.push({
+         x: Math.random() * canvas.width,
+         y: Math.random() * canvas.height,
+         radius: Math.random() * 1.5,
+         vx: (Math.random() - 0.5) * 0.3, // Slower movement
+         vy: (Math.random() - 0.5) * 0.3,
+         opacity: Math.random(),
+         fadeSpeed: Math.random() * 0.015 + 0.003, // Slower fade
+         fadeDirection: Math.random() > 0.5 ? 1 : -1,
+       });
+     }
+   };
 
     // Animate stars
     const animate = () => {
