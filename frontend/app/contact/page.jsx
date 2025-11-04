@@ -54,26 +54,19 @@ const Contact = () => {
   const handleSocialClick = (e, appUrl, webUrl) => {
     if (isMobile) {
       e.preventDefault();
-      window.location.href = appUrl;
 
-      const timeout = setTimeout(() => {
-        window.location.href = webUrl;
-      }, 2000);
+      const start = Date.now();
 
-      const handleVisibilityChange = () => {
-        if (document.hidden) {
-          clearTimeout(timeout);
-        }
-      };
+      // Try to open app in a new tab
+      const newWindow = window.open(appUrl, "_blank");
 
-      document.addEventListener("visibilitychange", handleVisibilityChange);
-
+      // Fallback to web version if app doesn't open after 1.5s
       setTimeout(() => {
-        document.removeEventListener(
-          "visibilitychange",
-          handleVisibilityChange
-        );
-      }, 3000);
+        const elapsed = Date.now() - start;
+        if (!newWindow || newWindow.closed || elapsed < 1500) {
+          window.open(webUrl, "_blank", "noopener,noreferrer");
+        }
+      }, 1500);
     }
   };
 
