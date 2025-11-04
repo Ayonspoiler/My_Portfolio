@@ -63,7 +63,9 @@ const Services = () => {
                 <div className="w-full flex justify-between items-center">
                   <div
                     className={`text-5xl font-extrabold text-outline text-transparent transition-all duration-500 ${
-                      isActive ? "text-accent" : "group-hover:text-accent"
+                      isActive
+                        ? "text-accent"
+                        : " text-transparent text-outline group-hover:text-accent"
                     }`}
                   >
                     {service.num}
