@@ -91,10 +91,10 @@ const Contact = () => {
     {
       icon: <FaFacebook />,
       name: "Facebook",
-      appUrl: "fb://profile/shadmanalam.ayon",
+      appUrl: "fb://profile/100015304697499",
       webUrl: "https://www.facebook.com/shadmanalam.ayon",
       path: isMobile
-        ? "fb://profile/shadmanalam.ayon"
+        ? "fb://profile/100015304697499"
         : "https://www.facebook.com/shadmanalam.ayon",
       isSimpleLink: false,
     },

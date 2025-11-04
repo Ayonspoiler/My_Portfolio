@@ -86,11 +86,11 @@ const Socials = ({ containerStyles, iconStyles }) => {
     {
       icon: <FaFacebook />,
       appUrl: isIOS
-        ? "fb://profile/shadmanalam.ayon"
-        : "fb://profile/shadmanalam.ayon",
+        ? "fb://profile/100015304697499"
+        : "fb://profile/100015304697499",
       webUrl: "https://www.facebook.com/shadmanalam.ayon",
       path: isMobile
-        ? "fb://profile/shadmanalam.ayon"
+        ? "fb://profile/100015304697499"
         : "https://www.facebook.com/shadmanalam.ayon",
       isSimpleLink: false,
     },
