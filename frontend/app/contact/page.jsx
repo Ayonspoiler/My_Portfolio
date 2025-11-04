@@ -54,19 +54,26 @@ const Contact = () => {
   const handleSocialClick = (e, appUrl, webUrl) => {
     if (isMobile) {
       e.preventDefault();
+      window.location.href = appUrl;
 
-      const start = Date.now();
+      const timeout = setTimeout(() => {
+        window.location.href = webUrl;
+      }, 2000);
 
-      // Try to open app in a new tab
-      const newWindow = window.open(appUrl, "_blank");
-
-      // Fallback to web version if app doesn't open after 1.5s
-      setTimeout(() => {
-        const elapsed = Date.now() - start;
-        if (!newWindow || newWindow.closed || elapsed < 1500) {
-          window.open(webUrl, "_blank", "noopener,noreferrer");
+      const handleVisibilityChange = () => {
+        if (document.hidden) {
+          clearTimeout(timeout);
         }
-      }, 1500);
+      };
+
+      document.addEventListener("visibilitychange", handleVisibilityChange);
+
+      setTimeout(() => {
+        document.removeEventListener(
+          "visibilitychange",
+          handleVisibilityChange
+        );
+      }, 3000);
     }
   };
 
@@ -77,7 +84,7 @@ const Contact = () => {
       appUrl: "linkedin://in/syed-md-shadman-alam-493991268",
       webUrl: "https://www.linkedin.com/in/syed-md-shadman-alam-493991268/",
       path: isMobile
-        ? "linkedin://in/syed-md-shadman-alam-493991268"
+        ? "linkedin://profile/syed-md-shadman-alam-493991268"
         : "https://www.linkedin.com/in/syed-md-shadman-alam-493991268/",
       isSimpleLink: false,
     },

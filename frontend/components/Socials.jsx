@@ -35,24 +35,36 @@ const Socials = ({ containerStyles, iconStyles }) => {
   }, []);
 
   // Handle clicks for apps that might not be installed
-const handleSocialClick = (e, appUrl, webUrl) => {
-  if (isMobile) {
-    e.preventDefault();
+  const handleSocialClick = (e, appUrl, webUrl) => {
+    if (isMobile) {
+      e.preventDefault();
 
-    const start = Date.now();
+      // Try to open the app
+      window.location.href = appUrl;
 
-    // Try to open app in a new tab
-    const newWindow = window.open(appUrl, "_blank");
+      // Fallback to web version if app doesn't open (after 2 seconds)
+      const timeout = setTimeout(() => {
+        window.location.href = webUrl;
+      }, 2000);
 
-    // Fallback to web version if app doesn't open after 1.5s
-    setTimeout(() => {
-      const elapsed = Date.now() - start;
-      if (!newWindow || newWindow.closed || elapsed < 1500) {
-        window.open(webUrl, "_blank", "noopener,noreferrer");
-      }
-    }, 1500);
-  }
-};
+      // Clear timeout if page is hidden (app opened successfully)
+      const handleVisibilityChange = () => {
+        if (document.hidden) {
+          clearTimeout(timeout);
+        }
+      };
+
+      document.addEventListener("visibilitychange", handleVisibilityChange);
+
+      // Cleanup
+      setTimeout(() => {
+        document.removeEventListener(
+          "visibilitychange",
+          handleVisibilityChange
+        );
+      }, 3000);
+    }
+  };
 
   const socials = [
     {
@@ -60,17 +72,18 @@ const handleSocialClick = (e, appUrl, webUrl) => {
       path: "https://github.com/Ayonspoiler",
       isSimpleLink: true,
     },
-    {
-      icon: <FaLinkedin />,
-      appUrl: isIOS
-        ? "linkedin://in/syed-md-shadman-alam-493991268"
-        : "linkedin://in/syed-md-shadman-alam-493991268",
-      webUrl: "https://www.linkedin.com/in/syed-md-shadman-alam-493991268/",
-      path: isMobile
-        ? "linkedin://in/syed-md-shadman-alam-493991268"
-        : "https://www.linkedin.com/in/syed-md-shadman-alam-493991268/",
-      isSimpleLink: false,
-    },
+   {
+  icon: <FaLinkedin />,
+  appUrl: isIOS
+    ? "linkedin://in/syed-md-shadman-alam-493991268"
+    : "linkedin://in/syed-md-shadman-alam-493991268",
+  webUrl: "https://www.linkedin.com/in/syed-md-shadman-alam-493991268/",
+  path: isMobile
+    ? "linkedin://in/syed-md-shadman-alam-493991268"
+    : "https://www.linkedin.com/in/syed-md-shadman-alam-493991268/",
+  isSimpleLink: false,
+}
+,
     {
       icon: <FaFacebook />,
       appUrl: isIOS
