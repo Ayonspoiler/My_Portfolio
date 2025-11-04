@@ -75,11 +75,11 @@ const Socials = ({ containerStyles, iconStyles }) => {
     {
       icon: <FaLinkedin />,
       appUrl: isIOS
-        ? "linkedin://profile/syed-md-shadman-alam-493991268"
-        : "linkedin://profile/syed-md-shadman-alam-493991268",
+        ? "linkedin://in/syed-md-shadman-alam-493991268"
+        : "linkedin://in/syed-md-shadman-alam-493991268",
       webUrl: "https://www.linkedin.com/in/syed-md-shadman-alam-493991268/",
       path: isMobile
-        ? "linkedin://profile/syed-md-shadman-alam-493991268"
+        ? "linkedin://in/syed-md-shadman-alam-493991268"
         : "https://www.linkedin.com/in/syed-md-shadman-alam-493991268/",
       isSimpleLink: false,
     },
