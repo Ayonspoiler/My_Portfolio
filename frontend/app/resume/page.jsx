@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import {
   FaHtml5,
   FaCss3,
@@ -13,7 +14,6 @@ import {
 import { SiTailwindcss, SiNextdotjs, SiCplusplus } from "react-icons/si";
 
 // about data
-
 const about = {
   title: "About me",
   description:
@@ -48,15 +48,15 @@ const experience = {
   description:
     "A dedicated Software Engineering student with over a year of hands-on experience in full-stack development, gained through building complex university projects and a professional internship. I have successfully developed and deployed real-world applications, including e-commerce platforms and real-time chat systems, using technologies like React, Spring Boot, and Node.js. Passionate about transforming ideas into functional and efficient software solutions.",
 
-    items:[
-      {
-        company: "Bangladesh ICT & Innovation Network",
-        position: "Software Developer Intern",
-        duration: "Sept 2025 - Jan 2026",
- }
-    ]
-
+  items: [
+    {
+      company: "Bangladesh ICT & Innovation Network",
+      position: "Software Developer Intern",
+      duration: "Sept 2025 - Jan 2026",
+    },
+  ],
 };
+
 const education = {
   icon: "/assets/resume/cap.svg",
   title: "My Education",
@@ -96,6 +96,7 @@ const education = {
     },
   ],
 };
+
 const skills = {
   title: "My Skills",
   description:
@@ -148,11 +149,40 @@ const skills = {
   ],
 };
 
-import {Tabs,TabsContent,TabsList,TabsTrigger} from "@/components/ui/tabs"
-import { Tooltip,TooltipContent,TooltipProvider,TooltipTrigger} from "@/components/ui/tooltip";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import {motion,animate} from "framer-motion";
+import { motion } from "framer-motion";
+
 const Resume = () => {
+  const [activeSkill, setActiveSkill] = useState(null);
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Detect mobile on mount
+  useState(() => {
+    if (typeof window !== "undefined") {
+      setIsMobile(window.innerWidth < 1024);
+
+      const handleResize = () => {
+        setIsMobile(window.innerWidth < 1024);
+      };
+
+      window.addEventListener("resize", handleResize);
+      return () => window.removeEventListener("resize", handleResize);
+    }
+  }, []);
+
+  const handleSkillClick = (index) => {
+    if (isMobile) {
+      setActiveSkill(activeSkill === index ? null : index);
+    }
+  };
+
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -164,7 +194,7 @@ const Resume = () => {
     >
       <Tabs
         defaultValue="experience"
-        className="flex flex-col xl:flex-row gap-[60px] w-full max-w-7xl mx-auto px-4 "
+        className="flex flex-col xl:flex-row gap-[60px] w-full max-w-7xl mx-auto px-4"
       >
         <TabsList className="flex flex-col w-full max-w-[380px] mx-auto xl:mx-0 gap-6">
           <TabsTrigger value="experience">Experience</TabsTrigger>
@@ -188,7 +218,7 @@ const Resume = () => {
                     return (
                       <li
                         key={index}
-                        className="bg-[#232329]  min-h-[184px] py-8 px-10 rounded-xl flex flex-col justify-center lg:items-start gap-2 w-full max-w-[500px] mx-auto lg:mx-0"
+                        className="bg-[#232329] min-h-[184px] py-8 px-10 rounded-xl flex flex-col justify-center lg:items-start gap-2 w-full max-w-[500px] mx-auto lg:mx-0"
                       >
                         <span className="text-accent text-center lg:text-left">
                           {item.duration}
@@ -207,6 +237,7 @@ const Resume = () => {
               </ScrollArea>
             </div>
           </TabsContent>
+
           {/* education */}
           <TabsContent value="education" className="w-full">
             <div className="flex flex-col gap-[30px] text-center xl:text-left">
@@ -220,7 +251,7 @@ const Resume = () => {
                     return (
                       <li
                         key={index}
-                        className="bg-[#232329]  min-h-[184px] py-8 px-10 rounded-xl flex flex-col justify-center lg:items-start gap-2 w-full max-w-[500px] mx-auto lg:mx-0"
+                        className="bg-[#232329] min-h-[184px] py-8 px-10 rounded-xl flex flex-col justify-center lg:items-start gap-2 w-full max-w-[500px] mx-auto lg:mx-0"
                       >
                         <span className="text-accent text-center lg:text-left">
                           {item.duration}
@@ -239,7 +270,7 @@ const Resume = () => {
               </ScrollArea>
             </div>
           </TabsContent>
-         
+
           {/* Skills */}
           <TabsContent value="skills" className="w-full h-full">
             <div className="flex flex-col gap-[30px]">
@@ -249,30 +280,60 @@ const Resume = () => {
                   {skills.description}
                 </p>
               </div>
+
               <ul className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 xl:gap-[30px]">
                 {skills.skillList.map((skill, index) => {
+                  const isActive = activeSkill === index;
+
                   return (
-                    <li key={index} className="">
-                      <TooltipProvider delayDuration={100}>
-                        <Tooltip>
-                          <TooltipTrigger className="w-full h-[150px] bg-[#232329] rounded-xl flex justify-center items-center group">
-                            <div
-                              className={`text-6xl transition-all duration-300 group-hover:text-accent`}
-                            >
-                              {skill.icon}
-                            </div>
-                          </TooltipTrigger>
-                          <TooltipContent>
-                            <p className="capitalize">{skill.name}</p>
-                          </TooltipContent>
-                        </Tooltip>
-                      </TooltipProvider>
+                    <li key={index}>
+                      {/* Desktop: Tooltip with hover */}
+                      <div className="hidden lg:block">
+                        <TooltipProvider delayDuration={100}>
+                          <Tooltip>
+                            <TooltipTrigger className="w-full h-[150px] bg-[#232329] rounded-xl flex justify-center items-center group">
+                              <div className="text-6xl transition-all duration-300 group-hover:text-accent">
+                                {skill.icon}
+                              </div>
+                            </TooltipTrigger>
+                            <TooltipContent>
+                              <p className="capitalize">{skill.name}</p>
+                            </TooltipContent>
+                          </Tooltip>
+                        </TooltipProvider>
+                      </div>
+
+                      {/* Mobile: Click to toggle */}
+                      <div className="lg:hidden">
+                        <button
+                          onClick={() => handleSkillClick(index)}
+                          className={`w-full h-[150px] rounded-xl flex flex-col justify-center items-center gap-3 transition-all duration-300 ${
+                            isActive
+                              ? "bg-accent/20 border-2 border-accent"
+                              : "bg-[#232329] border-2 border-transparent"
+                          }`}
+                        >
+                          <div
+                            className={`text-6xl transition-all duration-300 ${
+                              isActive ? "text-accent" : "text-white"
+                            }`}
+                          >
+                            {skill.icon}
+                          </div>
+                          {isActive && (
+                            <p className="text-sm capitalize text-accent font-semibold">
+                              {skill.name}
+                            </p>
+                          )}
+                        </button>
+                      </div>
                     </li>
                   );
                 })}
               </ul>
             </div>
           </TabsContent>
+
           {/* about */}
           <TabsContent
             value="about"
