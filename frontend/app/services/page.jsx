@@ -62,10 +62,10 @@ const Services = () => {
                 {/* top */}
                 <div className="w-full flex justify-between items-center">
                   <div
-                    className={`text-5xl font-extrabold text-outline text-transparent transition-all duration-500 ${
+                    className={`text-5xl font-extrabold transition-all duration-500 ${
                       isActive
                         ? "text-accent"
-                        : " text-transparent text-outline group-hover:text-accent"
+                        : "text-transparent text-outline group-hover:text-accent"
                     }`}
                   >
                     {service.num}
@@ -75,7 +75,7 @@ const Services = () => {
                     className={`w-[70px] h-[70px] rounded-full flex justify-center items-center transition-all duration-500 ${
                       isActive
                         ? "bg-accent hover:-rotate-45"
-                        : "bg-white group-hover:bg-accent hover:-rotate-45"
+                        : "bg-white group-hover:bg-accent group-hover:-rotate-45"
                     }`}
                   >
                     <BsArrowDownRight className="text-primary text-3xl" />
