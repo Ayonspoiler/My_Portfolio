@@ -35,36 +35,24 @@ const Socials = ({ containerStyles, iconStyles }) => {
   }, []);
 
   // Handle clicks for apps that might not be installed
-  const handleSocialClick = (e, appUrl, webUrl) => {
-    if (isMobile) {
-      e.preventDefault();
+const handleSocialClick = (e, appUrl, webUrl) => {
+  if (isMobile) {
+    e.preventDefault();
 
-      // Try to open the app
-      window.location.href = appUrl;
+    const start = Date.now();
 
-      // Fallback to web version if app doesn't open (after 2 seconds)
-      const timeout = setTimeout(() => {
-        window.location.href = webUrl;
-      }, 2000);
+    // Try to open app in a new tab
+    const newWindow = window.open(appUrl, "_blank");
 
-      // Clear timeout if page is hidden (app opened successfully)
-      const handleVisibilityChange = () => {
-        if (document.hidden) {
-          clearTimeout(timeout);
-        }
-      };
-
-      document.addEventListener("visibilitychange", handleVisibilityChange);
-
-      // Cleanup
-      setTimeout(() => {
-        document.removeEventListener(
-          "visibilitychange",
-          handleVisibilityChange
-        );
-      }, 3000);
-    }
-  };
+    // Fallback to web version if app doesn't open after 1.5s
+    setTimeout(() => {
+      const elapsed = Date.now() - start;
+      if (!newWindow || newWindow.closed || elapsed < 1500) {
+        window.open(webUrl, "_blank", "noopener,noreferrer");
+      }
+    }, 1500);
+  }
+};
 
   const socials = [
     {
