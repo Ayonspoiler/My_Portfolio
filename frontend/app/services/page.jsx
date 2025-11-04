@@ -74,7 +74,7 @@ const Services = () => {
                     href={service.href}
                     className={`w-[70px] h-[70px] rounded-full flex justify-center items-center transition-all duration-500 ${
                       isActive
-                        ? "bg-accent hover:-rotate-45"
+                        ? "bg-accent -rotate-45"
                         : "bg-white group-hover:bg-accent group-hover:-rotate-45"
                     }`}
                   >
